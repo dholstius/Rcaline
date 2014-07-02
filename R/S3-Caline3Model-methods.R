@@ -46,13 +46,15 @@ predict.Caline3Model <- function(object, units='ppm') {
 	stopifnot(ncol(computed) == length(non.calm))
 	pred[,non.calm] <- computed
 
-      if(units == 'ppm') {
+    if(units == 'ppm') {
 		pred <- pred * 0.0245 / pol$molecularWeight
 	} else if (units == 'mg/m3') {
 	      pred <- pred * 1.0e3
 	} else {
 	      # Default is ug/m3
 	}
+    
+    row.names(pred) <- row.names(rcp)
 
 	class(pred) <- c("HourlyConcentrations", "matrix")
 	attr(pred, "model") <- object

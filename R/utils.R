@@ -6,7 +6,8 @@ is.installed <- function(pkgname) pkgname %in% .packages(TRUE)
 #'
 #' @param x numeric vector
 #' @return a \link{double}-precision vector
-real64 <- function(x) as.real(x)
+#' @export
+real64 <- function(x) as.double(x)
 
 #' real32
 #'

@@ -1,6 +1,10 @@
 # History files
 .Rhistory
 
+# Object code
+src/*.o
+src/*.so
+
 # Example code in package build process
 *-Ex.R
 .Rproj.user

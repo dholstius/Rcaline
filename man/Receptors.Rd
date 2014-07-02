@@ -1,8 +1,8 @@
 \name{Receptors}
 \alias{Receptors}
-\alias{Receptors.matrix}
 \alias{Receptors.SpatialPoints}
 \alias{Receptors.SpatialPointsDataFrame}
+\alias{Receptors.matrix}
 \title{Receptor locations}
 \usage{
   Receptors(obj, ...)

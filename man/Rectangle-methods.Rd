@@ -1,7 +1,7 @@
 \name{bbox.Rectangle}
+\alias{as.SpatialPolygons.Rectangle}
 \alias{as.array.Rectangle}
 \alias{as.data.frame.Rectangle}
-\alias{as.SpatialPolygons.Rectangle}
 \alias{bbox.Rectangle}
 \title{bbox.Rectangle}
 \usage{

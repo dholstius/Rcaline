@@ -1,8 +1,8 @@
 \name{Meteorology}
 \alias{Meteorology}
+\alias{Meteorology.ISCFile}
 \alias{Meteorology.character}
 \alias{Meteorology.data.frame}
-\alias{Meteorology.ISCFile}
 \title{Meteorology}
 \usage{
   Meteorology(x, ...)

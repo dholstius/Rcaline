@@ -1,0 +1,66 @@
+% \VignetteIndexEntry{Rcaline: Modeling traffic-related pollution with R and the CALINE3 dispersion model} 
+% \VignetteKeywords{Rcaline,CALINE,CALINE3}
+% \VignettePackage{Rcaline}
+
+\documentclass[a4paper]{article}
+
+\title{Rcaline: Modeling traffic-related pollution with R and the CALINE3 dispersion model}
+\author{David Holstius}
+\bibliographystyle{plain}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{hyperref}
+
+\begin{document}
+
+\DefineVerbatimEnvironment{Sinput}{Verbatim} {xleftmargin=1em} \DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=1em} \DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=1em} \fvset{listparameters={\setlength{\topsep}{0pt}}} \renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+
+\setkeys{Gin}{width=0.95\textwidth}
+
+<<echo=false>>=
+options(width=60, continue=" ")
+options(SweaveHooks=list(fig=function() par(mar=c(5.1, 4.1, 1.1, 2.1))))
+@
+
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\Rvar}[1]{\texttt{#1}}
+\newcommand{\Rfunc}[1]{\texttt{#1}}
+\newcommand{\pkg}[1]{\texttt{#1}}
+
+<<echo=FALSE>>= 
+options(
+	width=60, 
+	continue=" ", 
+	SweaveHooks=list(fig=function() par(mar=c(5.1, 4.1, 1.1, 2.1)))
+	)
+@
+
+\SweaveOpts{width=6,height=4}
+
+\maketitle
+
+\section{Introduction}
+
+\pkg{Rcaline} provides an interface to the CALINE family of line-source atmospheric dispersion models \cite{benson1979caline3,benson1992review}. These steady-state, Gaussian dispersion models are used to predict aerosol concentrations downwind from mobile emission source(s) such as highway traffic.
+
+\section{Features}
+
+At the heart of \pkg{Rcaline} is a Fortran library, \pkg{libcaline}, that wraps original code from the CALINE3 implementation created by the California Department of Transportation (CALTRANS).\footnote{Support is planned for CALINE4 in a future release.} Given the same inputs, \pkg{libcaline} has been tested to produce identical outputs. However, \pkg{libcaline} removes significant limitations found in previous implementations of CALINE: for example, \pkg{libcaline} can be used to model an unlimited number of roadway links and an unlimited number of receptors, bound only by available memory and CPU resources.
+
+By providing access to \pkg{libcaline} within the R environment, \pkg{Rcaline} also makes it much easier to use the CALINE model with contemporary data sources, such as ESRI shapefiles. \pkg{Rcaline} also provides full machine-precision access to CALINE model results in a convenient format. Thus, it's easy to use basic R commands---or third-party R packages---to visualize, compare, and export model results. Accompanying vignettes illustrate the use of several complementary packages, including: \pkg{sp}, \pkg{rgdal}, and \pkg{rgeos}, for handling spatial data; \pkg{ggplot2}, for plotting results; and \pkg{MBA}, for interpolation.
+
+Finally, the R environment also provides useful scripting capabilities for automating large batches of model runs. For advanced users, it is possible to combine \pkg{Rcaline} with parallel computing tools, like the \pkg{foreach} package, to achieve significant speed gains in large model runs (e.g., ~4x on a modern 4-core machine, or 8x on an 8-core machine) in pure R. Within a shell environment, \pkg{Rcaline} can also be scripted, with the use of GNU \code{make}, \code{qsub}, or other distributed computing tools.
+
+\section{Scope and Limitations}
+
+The CALINE3 model was originally developed for modeling the dispersion of carbon monoxide (CO) from free-flow traffic, over homogeneous terrain, where wind speeds generally exceed 1.0 m/s. As with any model, care should be exercised to ensure that the practical application is theoretically well founded. For more on the theoretical scope and limitations of the CALINE model family, including terrain and other considerations, see \cite{benson1992review}. 
+
+\section{Acknowledgments}
+
+The author thanks Profs. Edmund Seto and Michael Jerrett of the UC Berkeley School of Public Health, Division of Environmental Health Sciences, as well as the UC Berkeley Center for Information Technology in the Interests of Society (CITRIS), for their generous support of the development of \pkg{Rcaline} and \pkg{libcaline}. Sincere thanks also go to Phil Martien of the Bay Area Air Quality District (BAAQMD), who generously contributed user testing, feedback, and support leading to the 1.0 release.
+
+Rcaline is still in development, and feedback is welcome. If you have questions, suggestions, or related work to discuss, or if you have additional datasets that you would like to contribute to the \pkg{Rcaline} package, please contact the package maintainer, \href{mailto:david.holstius@berkeley.edu}{david.holstius@berkeley.edu}.
+
+\bibliography{Rcaline}
+
+\end{document}

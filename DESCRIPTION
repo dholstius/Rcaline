@@ -1,15 +1,18 @@
 Package: Rcaline
 Type: Package
 Title: Line source dispersion modeling using CALINE
-Version: 1.0-2
-Date: 2012-10-16
+Version: 1.1
+Date: 2014-07-02
 Author: David Holstius
-Maintainer: David Holstius <david.holstius@berkeley.edu>
+Maintainer: David Holstius <dholstius@baaqmd.gov>
 Depends:
     methods,
+    CALINE3 (>= 1.1),
     sp,
-    ggplot2,
-    rgeos
+    rgdal,
+    rgeos,
+    testthat
+Enhances: CALINE3 (>= 1.1)
 Suggests:
     MBA
 Description: Predicts steady-state aerosol concentrations
@@ -24,28 +27,4 @@ References: Benson, P. (1979) CALINE-3: A versatile dispersion model
     for predicting air pollution levels near highways and urban
     streets. Federal Highway Authority report FHWA/CA/TL-79/23,
     California DOT, Sacramento (1979).
-Collate:
-    'Rcaline-internal.R'
-    'Rcaline.R'
-    'libcaline.R'
-    'utils.R'
-    'read.ISC.R'
-    'CALINE3.R'
-    'S3-FortranArrays.R'
-    'geometry.R'
-    'S3-Caline3Model-accessors.R'
-    'S3-Caline3Model-methods.R'
-    'S3-Caline3Model.R'
-    'S3-Concentrations-methods.R'
-    'S3-Links-accessors.R'
-    'S3-Links-methods.R'
-    'S3-Links.R'
-    'S3-Meteorology-methods.R'
-    'S3-Meteorology.R'
-    'S3-Parameters.R'
-    'S3-Pollutant.R'
-    'S3-Receptors.R'
-    'S3-Terrain.R'
-    'S3-Rectangle.R'
-    'resize.R'
 Packaged: 2012-10-16 23:52:07.795 UTC; holstius

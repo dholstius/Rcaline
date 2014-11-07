@@ -13,3 +13,4 @@ src/*.so
 man/*.Rd
 
 vignettes/*_cache
+vignettes/*_files

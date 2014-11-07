@@ -1,9 +1,9 @@
 #' Handling model results
 #'
 #' Aggregate the "raw" result matrix obtained from \code{\link{predict.Caline3Model}},
-#' summarizing the pred estimates for each receptor. 
+#' summarizing the pred estimates for each receptor.
 #'
-#' Use \code{as(x, "SpatialPointsDataFrame")} to re-bind these summary statistics 
+#' Use \code{as(x, "SpatialPointsDataFrame")} to re-bind these summary statistics
 #' with the locations (and other attributes) of the rcp used in the prediction step.
 #'
 #' @param x concentrations obtained from \code{\link{predict.Caline3Model}}
@@ -13,7 +13,7 @@
 #'
 #' @return matrix of summary statistics\
 #'
-#' @S3method aggregate HourlyConcentrations
+#' @method aggregate HourlyConcentrations
 #' @importFrom stats aggregate
 #' @rdname HourlyConcentrations-methods
 #' @export
@@ -74,7 +74,7 @@ setMethod("spplot", "AggregatedConcentrations", spplot.AggregatedConcentrations)
 #'
 #' @keywords ggplot2
 #' @importFrom ggplot2 ggplot
-#' @S3method ggplot AggregatedConcentrations
+#' @method ggplot AggregatedConcentrations
 #' @rdname AggregatedConcentrations-methods
 #' @export
 ggplot.AggregatedConcentrations <- function(data, bounds, ...) {

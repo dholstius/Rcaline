@@ -2,7 +2,7 @@
 #'
 #' Construct a set of receptors, using a \link{FreeFlowLinks} as the basis.
 #'
-#' ReceptorGrid constructs a regular Cartesian grid of receptors no more 
+#' ReceptorGrid constructs a regular Cartesian grid of receptors no more
 #' than \code{maxDistance} from \code{links}.
 #'
 #' @param links a \link{FreeFlowLinks} object
@@ -17,11 +17,11 @@
 #' @seealso ReceptorRings
 #' @rdname ReceptorGrids
 #' @export
-ReceptorGrid <- function(links, z=1.8, resolution=1000.0, maxDistance=1000.0, 
+ReceptorGrid <- function(links, z=1.8, resolution=1000.0, maxDistance=1000.0,
 		rgeos.scale=1e+06) {
 	require(rgeos)
 	rgeos::setScale(rgeos.scale)
-	
+
 	# FIXME: take roadway width into account (don't measure distance from centerline, but from edge of road)
 	polylines <- centerlines(links)
 	buf <- rgeos::gBuffer(polylines, width=maxDistance)
@@ -30,17 +30,17 @@ ReceptorGrid <- function(links, z=1.8, resolution=1000.0, maxDistance=1000.0,
 	spobj <- SpatialPoints(xy)
 	proj4string(spobj) <- proj4string(links)
 	rcp <- Receptors(spobj, z=z)
-	
+
 	# Set row names
 	row.names(rcp) <- paste('RECP.', 1:length(rcp))
-	
+
 	return(rcp)
 }
 
 #' Receptor grids
 #'
 #' ReceptorRings constructs concentric rings of receptors at specific
-#' distances from \code{links}. 
+#' distances from \code{links}.
 #'
 #' @param links a \link{FreeFlowLinks} object
 #' @param z elevation in meters
@@ -53,33 +53,33 @@ ReceptorGrid <- function(links, z=1.8, resolution=1000.0, maxDistance=1000.0,
 #' @keywords receptors
 #' @rdname ReceptorGrids
 #' @export
-ReceptorRings <- function(links, z=1.8, distances=c(50, 100, 250, 500, 1000), 
+ReceptorRings <- function(links, z=1.8, distances=c(50, 100, 250, 500, 1000),
 	spacing=identity, rgeos.scale=1e+06) {
-		
+
 	require(rgeos)
 	rgeos::setScale(rgeos.scale)
-	
+
 	# Create buffers from centerlines and 'distances' vector;
 	# then discard inside/outside topology (save only the edges)
 	# TODO: take width into account (don't measure distance from centerline, but from edge of road)
-	buffers <- lapply(distances, function(x) gBuffer(centerlines(links), width = x)) 
+	buffers <- lapply(distances, function(x) gBuffer(centerlines(links), width = x))
 	rings <- lapply(buffers, as.SpatialLines)
-	
+
 	# Sample at fixed intervals along each ring
 	perimeter <- function(ring) sum(unlist(lapply(ring@lines, LinesLength)))
 	spsample.ring <- function(ring, ring.width, spacings) {
-		pts <- spsample(ring, type = "regular", n = perimeter(ring) / spacings) 
-		coordnames(pts) <- c("x", "y") 
-		d <- rep(ring.width, nrow(pts@coords)) 
+		pts <- spsample(ring, type = "regular", n = perimeter(ring) / spacings)
+		coordnames(pts) <- c("x", "y")
+		d <- rep(ring.width, nrow(pts@coords))
 		SpatialPointsDataFrame(pts, data.frame(distance = d, spacing = spacings))
 	}
 	spobj <- do.call(rbind, mapply(spsample.ring, rings, distances, spacings=spacing(distances)))
 	rcp <- Receptors(spobj, z=z)
       proj4string(rcp) <- proj4string(centerlines(links))
-	
+
 	# Set row names
 	row.names(rcp) <- paste('RECP.', 1:length(rcp))
-	
+
 	return(rcp)
 }
 
@@ -98,7 +98,7 @@ ReceptorRings <- function(links, z=1.8, distances=c(50, 100, 250, 500, 1000),
 #' @export
 Receptors <- function(obj, ...) UseMethod("Receptors")
 
-#' @S3method Receptors SpatialPointsDataFrame
+#' @method Receptors SpatialPointsDataFrame
 #' @rdname Receptors
 Receptors.SpatialPointsDataFrame <- function(obj, z=1.8, check.projection=TRUE) {
 	if('z' %in% names(obj@data)) {
@@ -109,7 +109,7 @@ Receptors.SpatialPointsDataFrame <- function(obj, z=1.8, check.projection=TRUE) 
 	SpatialPointsDataFrame(rcp, data=obj@data)
 }
 
-#' @S3method Receptors SpatialPoints
+#' @method Receptors SpatialPoints
 #' @rdname Receptors
 Receptors.SpatialPoints <- function(obj, z=1.8, check.projection=TRUE) {
 	if(check.projection) {
@@ -124,7 +124,7 @@ Receptors.SpatialPoints <- function(obj, z=1.8, check.projection=TRUE) {
 	return(rcp)
 }
 
-#' @S3method Receptors matrix
+#' @method Receptors matrix
 #' @rdname Receptors
 Receptors.matrix <- function(obj, z=1.8) {
 	coords <- obj
@@ -134,7 +134,7 @@ Receptors.matrix <- function(obj, z=1.8) {
       stopifnot(ncol(coords) == 3)
 	colnames(coords) <- c('x', 'y', 'z')
 	if(is.null(rownames(obj))) {
-      	rownames(coords) <- paste('RECP.', 1:nrow(obj))      
+      	rownames(coords) <- paste('RECP.', 1:nrow(obj))
       } else {
             rownames(coords) <- rownames(obj)
       }

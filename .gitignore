@@ -9,8 +9,5 @@ src/*.so
 *-Ex.R
 .Rproj.user
 
-# .Rd files
-man/*.Rd
-
 vignettes/*_cache
 vignettes/*_files

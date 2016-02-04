@@ -121,7 +121,7 @@ terrain.default <- function(model, ...) model$terrain
 #' @method predict Caline3Model
 #' @importFrom stats predict
 #' @export
-predict.Caline3Model <- function(object, units='ppm') {
+predict.Caline3Model <- function (object, max_dist = 3000, units = "ppm") {
 
   stopifnot(inherits(object, 'Caline3Model'))
   lnk <- links(object)
@@ -135,19 +135,32 @@ predict.Caline3Model <- function(object, units='ppm') {
   NL <- nrow(as.data.frame(lnk))
 
   # Initialize the full matrix
-  pred <- matrix(NA,
-                 nrow = nrow(as.data.frame(rcp)),
-                 ncol = nrow(as.data.frame(met)),
-                 dimnames = list(RCP=row.names(rcp), MET=row.names(met)))
+  pred <- matrix(
+    NA_real_, nrow = NR, ncol = NM,
+    dimnames = list(RCP = row.names(rcp), MET = row.names(met)))
 
   # Compute only the conditions for which wind speed >= 1.0
-  rcp_args <- as.Fortran(rcp)
-  lnk_args <- as.Fortran(lnk)
+  rcp_args <- Rcaline:::as.Fortran(rcp)
+  lnk_args <- Rcaline:::as.Fortran(lnk)
   non_calm <- with(met, which(windSpeed >= 1.0))
-  met_args <- as.Fortran(met[non_calm,])
-  aux_args <- list(ATIM = 60.0, Z0 = ter$surfaceRoughness, VS = pol$settlingVelocity, VD = pol$depositionVelocity)
+  met_args <- Rcaline:::as.Fortran(met[non_calm,])
 
-  C <- do.call("CALINE3_RECEPTOR_TOTALS", c(rcp_args, lnk_args, met_args, aux_args))
+  # For restricting to (link, receptor) pairs of distance ≤ 1000 m
+  hypot2 <- function (x1, y1, x2, y2) (x2 - x1)^2 + (y2 - y1)^2
+  squared_distances <- with(as.list(c(lnk_args, rcp_args)), outer(1:NR, 1:NL, function (i, j) {
+    XL <- (XL1[j] + XL2[j]) / 2
+    YL <- (YL1[j] + YL2[j]) / 2
+    hypot2(XR[i], YR[i], XL, YL)
+  }))
+  LXR <- (squared_distances <= (max_dist ^ 2))
+
+  aux_args <- list(
+    ATIM = 60.0, Z0 = ter$surfaceRoughness,
+    VS = pol$settlingVelocity, VD = pol$depositionVelocity,
+    LXR = LXR)
+
+  all_args <- c(rcp_args, lnk_args, met_args, aux_args)
+  C <- do.call("CALINE3_RECEPTOR_TOTALS", all_args)
 
   # Assign the computed estimates back to the matrix
   require(testthat)

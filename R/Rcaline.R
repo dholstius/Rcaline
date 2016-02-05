@@ -4,7 +4,7 @@
 #' @docType package
 #'
 #' @title Rcaline
-#' @author David Holstius \email{david.holstius@@berkeley.edu}
+#' @author David Holstius \email{dholstius@@baaqmd.gov}
 #'
 #' @references
 #' Benson, P. (1979) CALINE-3: A versatile dispersion model for predicting air pollution levels near highways and urban streets. Federal Highway Authority report FHWA/CA/TL-79/23, California DOT, Sacramento (1979).

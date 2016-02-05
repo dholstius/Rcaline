@@ -1,12 +1,24 @@
-# Rcaline
+---
+title: "Rcaline: Modeling traffic-related pollution with R and the CALINE3 dispersion model"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    fig_caption: yes
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Rcaline: Modeling traffic-related pollution with R and the CALINE3 dispersion model}
+  %\VignetteKeywords{Rcaline,CALINE,CALINE3}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo = FALSE}
+options(width = 60, continue = " ")
+#options(SweaveHooks=list(fig=function() par(mar=c(5.1, 4.1, 1.1, 2.1))))
+```
+
+## Introduction
 
 `Rcaline` provides an interface to the CALINE family of line-source atmospheric dispersion models (Benson 1979, 1992). These steady-state, Gaussian dispersion models are used to predict pollutant concentrations downwind from mobile emission sources such as highway traffic.
-
-## Quick start
-
-    if (!require(devtools)) install.packages("devtools")
-    devtools::install_github("BAAQMD/Rcaline")
-    vignette("SanFrancisco", package = "Rcaline")
 
 ## Features
 

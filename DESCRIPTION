@@ -14,7 +14,8 @@ Depends:
     testthat
 Enhances: CALINE3 (>= 1.2)
 Suggests:
-    MBA
+    MBA,
+    knitr
 Description: Predicts steady-state aerosol concentrations
     near lineal sources (for example, emissions from
     highway traffic). Based on the CALINE family of

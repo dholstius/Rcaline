@@ -53,6 +53,9 @@ FreeFlowLinks <- function(spobj, vehiclesPerHour, emissionFactor, width, height=
 	if(is.null(obj$transformArgs$classification))
             obj$transformArgs$classification = classification
 
+	# For reference (new in v1.2)
+	attr(obj, ".spobj") <- spobj
+
 	# Precompute the segments
 	attr(obj, ".data") <- as.data.frame(obj)
 
@@ -101,6 +104,14 @@ ggplot.FreeFlowLinks <- function(x, ...) {
   centerlines <- geom_segment(aes(x=XL1, y=YL1, xend=XL2, yend=YL2, color=Q))
   return(map + centerlines + scale_color_gradient2(expression(bold(Q) ~~ bgroup("(", over(g, mi %.% hr), ")")),
                                                    low="green", mid="yellow", high="red", midpoint=median(dat$Q)))
+}
+
+
+#' as.SpatialLines.FreeFlowLinks
+#' @note new in v1.2
+#' @export
+as.SpatialLines.FreeFlowLinks <- function(x, ...) {
+  attr(x, ".spobj")
 }
 
 #' as.data.frame

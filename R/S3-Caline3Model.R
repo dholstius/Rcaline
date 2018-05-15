@@ -121,7 +121,7 @@ terrain.default <- function(model, ...) model$terrain
 #' @method predict Caline3Model
 #' @importFrom stats predict
 #' @export
-predict.Caline3Model <- function (object, max_dist = 3000, units = "ppm") {
+predict.Caline3Model <- function (object, max_dist = 3000, units = "ppm", CAL_MODEL = "CAL3RXL") {
 
   stopifnot(inherits(object, 'Caline3Model'))
   lnk <- links(object)
@@ -160,7 +160,7 @@ predict.Caline3Model <- function (object, max_dist = 3000, units = "ppm") {
     LXR = LXR)
 
   all_args <- c(rcp_args, lnk_args, met_args, aux_args)
-  C <- do.call("CALINE3_RECEPTOR_TOTALS", all_args)
+  C <- do.call(CAL_MODEL, all_args)
 
   # Assign the computed estimates back to the matrix
   require(testthat)
